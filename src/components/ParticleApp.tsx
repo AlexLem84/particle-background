@@ -6,6 +6,10 @@ interface ParticleParameters {
   numParticles: number;
   particleSize: number;
   particleColor: string;
+  particleColor2: string;
+  particleColor3: string;
+  colorVariation: number;
+  gradientIntensity: number;
   particleOpacity: number;
   noiseScale: number;
   noiseSpeed: number;
@@ -13,6 +17,12 @@ interface ParticleParameters {
   interactionRadius: number;
   interactionStrength: number;
   backgroundColor: string;
+  motionType: string;
+  spiralSpeed: number;
+  waveAmplitude: number;
+  waveFrequency: number;
+  orbitRadius: number;
+  orbitSpeed: number;
 }
 
 export default function ParticleApp() {
@@ -20,20 +30,50 @@ export default function ParticleApp() {
     numParticles: 50000,
     particleSize: 1.0,
     particleColor: '#00aaff',
+    particleColor2: '#ff6b6b',
+    particleColor3: '#4ecdc4',
+    colorVariation: 0.3,
+    gradientIntensity: 1.0,
     particleOpacity: 1.0,
     noiseScale: 2.0,
     noiseSpeed: 0.02,
     motionMagnitude: 1.0,
     interactionRadius: 100,
     interactionStrength: 50,
-    backgroundColor: '#1a1a1a'
+    backgroundColor: '#1a1a1a',
+    motionType: 'noise',
+    spiralSpeed: 0.5,
+    waveAmplitude: 10.0,
+    waveFrequency: 0.1,
+    orbitRadius: 20.0,
+    orbitSpeed: 0.3
   });
 
   const handleParameterChange = useCallback((param: string, value: any) => {
-    setParameters(prev => ({
-      ...prev,
-      [param]: value
-    }));
+    if (param === 'colorPreset') {
+      const presets = {
+        custom: { particleColor: '#00aaff', particleColor2: '#ff6b6b', particleColor3: '#4ecdc4' },
+        video: { particleColor: '#0066ff', particleColor2: '#8a2be2', particleColor3: '#ff69b4' }, // Blue-Purple-Pink
+        ocean: { particleColor: '#0066cc', particleColor2: '#00aaff', particleColor3: '#4ecdc4' },
+        sunset: { particleColor: '#ff6b6b', particleColor2: '#ffa726', particleColor3: '#ffeb3b' },
+        aurora: { particleColor: '#4caf50', particleColor2: '#8bc34a', particleColor3: '#cddc39' },
+        fire: { particleColor: '#ff5722', particleColor2: '#ff9800', particleColor3: '#ffc107' },
+        forest: { particleColor: '#2e7d32', particleColor2: '#4caf50', particleColor3: '#8bc34a' },
+        cosmic: { particleColor: '#9c27b0', particleColor2: '#673ab7', particleColor3: '#3f51b5' },
+        neon: { particleColor: '#00e676', particleColor2: '#ff1744', particleColor3: '#00bcd4' }
+      };
+      
+      const preset = presets[value as keyof typeof presets] || presets.custom;
+      setParameters(prev => ({
+        ...prev,
+        ...preset
+      }));
+    } else {
+      setParameters(prev => ({
+        ...prev,
+        [param]: value
+      }));
+    }
   }, []);
 
   const handleExport = useCallback(() => {
@@ -63,24 +103,61 @@ export default function ParticleApp() {
   }, [parameters]);
 
   return (
-    <>
-      <ParticleBackground
-        numParticles={parameters.numParticles}
-        particleSize={parameters.particleSize}
-        particleColor={parameters.particleColor}
-        noiseScale={parameters.noiseScale}
-        noiseSpeed={parameters.noiseSpeed}
-        motionMagnitude={parameters.motionMagnitude}
-        interactionRadius={parameters.interactionRadius}
-        interactionStrength={parameters.interactionStrength}
-        backgroundColor={parameters.backgroundColor}
-      />
-      <ControlPanel
-        onParameterChange={handleParameterChange}
-        onExport={handleExport}
-        onSavePreset={handleSavePreset}
-      />
-    </>
+    <div style={{
+      display: 'flex',
+      width: '100vw',
+      height: '100vh',
+      margin: 0,
+      padding: 0
+    }}>
+      <div style={{
+        flex: 1,
+        position: 'relative',
+        background: '#1a1a1a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        minHeight: '100vh'
+      }}>
+        <ParticleBackground
+          numParticles={parameters.numParticles}
+          particleSize={parameters.particleSize}
+          particleColor={parameters.particleColor}
+          particleColor2={parameters.particleColor2}
+          particleColor3={parameters.particleColor3}
+          colorVariation={parameters.colorVariation}
+          gradientIntensity={parameters.gradientIntensity}
+          noiseScale={parameters.noiseScale}
+          noiseSpeed={parameters.noiseSpeed}
+          motionMagnitude={parameters.motionMagnitude}
+          interactionRadius={parameters.interactionRadius}
+          interactionStrength={parameters.interactionStrength}
+          backgroundColor={parameters.backgroundColor}
+          motionType={parameters.motionType}
+          spiralSpeed={parameters.spiralSpeed}
+          waveAmplitude={parameters.waveAmplitude}
+          waveFrequency={parameters.waveFrequency}
+          orbitRadius={parameters.orbitRadius}
+          orbitSpeed={parameters.orbitSpeed}
+        />
+      </div>
+      <div style={{
+        width: '350px',
+        background: '#2a2a2a',
+        borderLeft: '1px solid #404040',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+        overflowX: 'hidden'
+      }}>
+        <ControlPanel
+          onParameterChange={handleParameterChange}
+          onExport={handleExport}
+          onSavePreset={handleSavePreset}
+        />
+      </div>
+    </div>
   );
 }
 

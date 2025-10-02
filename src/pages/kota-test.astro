@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import KotaTestApp from '../components/KotaTestApp.tsx';
+---
+
+<Layout title="Kota Background Test">
+  <main>
+    <KotaTestApp client:load />
+  </main>
+</Layout>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #000;
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  main {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+</style>

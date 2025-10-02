@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Background Export Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        button {
+            background: #0066ff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #0052cc;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your Website Content -->
+    <div class="content">
+        <h1>Particle Background Export</h1>
+        <p>This demonstrates how to use the exported particle background on any website. The particles are fully interactive and customizable.</p>
+        
+        <div class="controls">
+            <h3>Try Different Presets:</h3>
+            <div class="preset-buttons">
+                <button onclick="changePreset('organic')">Organic Flow</button>
+                <button onclick="changePreset('wave')">Wave Motion</button>
+                <button onclick="changePreset('spiral')">Spiral Dance</button>
+                <button onclick="changePreset('3d')">3D Rotation</button>
+                <button onclick="changePreset('pulse')">Pulsing</button>
+            </div>
+            
+            <h3>Color Themes:</h3>
+            <div class="preset-buttons">
+                <button onclick="changeColors('blue')">Blue Theme</button>
+                <button onclick="changeColors('purple')">Purple Theme</button>
+                <button onclick="changeColors('pink')">Pink Theme</button>
+                <button onclick="changeColors('rainbow')">Rainbow</button>
+            </div>
+        </div>
+        
+        <p><strong>Integration:</strong> Just include the particle-export.js script and call <code>ParticleBackground.init(config)</code></p>
+    </div>
+
+    <!-- Include the particle export script -->
+    <script src="particle-export.js"></script>
+    
+    <script>
+        // Initialize particle background with default settings
+        let particleBG;
+        
+        // Preset configurations
+        const presets = {
+            organic: {
+                motionType: 'organic',
+                numParticles: 15000,
+                motionMagnitude: 0.8,
+                noiseScale: 1.5,
+                noiseSpeed: 0.015
+            },
+            wave: {
+                motionType: 'wave',
+                numParticles: 12000,
+                motionMagnitude: 1.2,
+                waveAmplitude: 10.0,
+                waveFrequency: 0.1
+            },
+            spiral: {
+                motionType: 'spiral',
+                numParticles: 10000,
+                motionMagnitude: 0.6,
+                spiralSpeed: 0.5
+            },
+            '3d': {
+                motionType: '3d',
+                numParticles: 18000,
+                motionMagnitude: 1.0,
+                noiseScale: 2.0
+            },
+            pulse: {
+                motionType: 'pulse',
+                numParticles: 8000,
+                motionMagnitude: 0.4,
+                spiralSpeed: 0.8
+            }
+        };
+        
+        const colorThemes = {
+            blue: {
+                particleColor: '#0066ff',
+                particleColor2: '#0044cc',
+                particleColor3: '#0088ff'
+            },
+            purple: {
+                particleColor: '#8a2be2',
+                particleColor2: '#6a1b9a',
+                particleColor3: '#ba68c8'
+            },
+            pink: {
+                particleColor: '#ff69b4',
+                particleColor2: '#e91e63',
+                particleColor3: '#f8bbd9'
+            },
+            rainbow: {
+                particleColor: '#ff0000',
+                particleColor2: '#00ff00',
+                particleColor3: '#0000ff'
+            }
+        };
+        
+        // Initialize particle background
+        function initParticleBackground() {
+            particleBG = new ParticleBackground();
+            particleBG.init({
+                numParticles: 15000,
+                particleSize: 1.2,
+                particleColor: '#0066ff',
+                particleColor2: '#8a2be2',
+                particleColor3: '#ff69b4',
+                motionType: 'organic',
+                backgroundColor: '#0a0a0a',
+                interactionRadius: 80,
+                interactionStrength: 40
+            });
+        }
+        
+        // Change motion preset
+        function changePreset(presetName) {
+            if (particleBG && presets[presetName]) {
+                particleBG.update(presets[presetName]);
+            }
+        }
+        
+        // Change color theme
+        function changeColors(themeName) {
+            if (particleBG && colorThemes[themeName]) {
+                particleBG.update(colorThemes[themeName]);
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initParticleBackground);
+        
+        // Cleanup when page unloads
+        window.addEventListener('beforeunload', () => {
+            if (particleBG) {
+                particleBG.destroy();
+            }
+        });
+    </script>
+</body>
+</html>
+
